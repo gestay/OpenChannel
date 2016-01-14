@@ -29,6 +29,12 @@ function area(section::Trapezoidal, y::Real)
     return y * ( section.b + (section.kl + section.kr)*y/2 )
 end
 
+function wp(section::Trapezoidal, y::Real)
+    temp_a = sqrt( 1 + section.kl*section.kl )
+    temp_b = sqrt( 1 + section.kr*section.kr )
+    return section.b + y*( temp_a + temp_b )
+end
+
 #Critical depth
 function yc(section::Triangular, Q, g)
     Q2 = Q*Q
