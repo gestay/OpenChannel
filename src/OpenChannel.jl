@@ -15,7 +15,7 @@ immutable Triangular <: Section
     kr::Real
 end
 
-function Fr2(section::Section, Q, g, y)
+function Fr2(section::Section, Q::Real, g::Real, y::Real)
     Q2 = Q*Q
     a3 = area(section, y) * area(section, y) * area(section, y)
     return Q2*tw(section, y) / (g * a3)
@@ -36,13 +36,13 @@ function wp(section::Trapezoidal, y::Real)
 end
 
 #Critical depth
-function yc(section::Triangular, Q, g)
+function yc(section::Triangular, Q::Real, g::Real)
     Q2 = Q*Q
     k2 = (section.kl + section.kr)*(section.kl + section.kr)
     return ( 8*Q2 / (k2*g) )^(1/5)
 end
 
-function yc(section::Trapezoidal, Q, g)
+function yc(section::Trapezoidal, Q::Real, g::Real)
     tri = Triangular(section.kl, section.kr)
     guess = yc(tri, Q, g)
     #Review the bracket
@@ -50,7 +50,7 @@ function yc(section::Trapezoidal, Q, g)
 end
 
 #Normal depth
-function yn(section::Triangular, Q, s, n)
+function yn(section::Triangular, Q::Real, s::Real, n::Real)
     temp_a = ( Q*n/sqrt(s) )^(3/8)
     temp_b = ( sqrt(1 + section.kl*section.kl)
                + sqrt(1 + section.kr*section.kr) )^(1/4)
