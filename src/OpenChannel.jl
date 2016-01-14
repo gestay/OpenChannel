@@ -29,10 +29,11 @@ function area(section::Trapezoidal, y::Real)
     return y * ( section.b + (section.kl + section.kr)*y/2 )
 end
 
+#Critical depth
 function yc(section::Triangular, Q, g)
     Q2 = Q*Q
     k2 = (section.kl + section.kr)*(section.kl + section.kr)
-    return ( 8*Q2 / (k2*g) )^(1.0/5.0)
+    return ( 8*Q2 / (k2*g) )^(1/5)
 end
 
 function yc(section::Trapezoidal, Q, g)
@@ -40,6 +41,16 @@ function yc(section::Trapezoidal, Q, g)
     guess = yc(tri, Q, g)
     #Review the bracket
     return fzero(x -> Fr2(section, Q, g, x) - 1, 0, guess)
+end
+
+#Normal depth
+function yn(section::Triangular, Q, s, n)
+    temp_a = ( Q*n/sqrt(s) )^(3/8)
+    temp_b = ( sqrt(1 + section.kl*section.kl)
+               + sqrt(1 + section.kr*section.kr) )^(1/4)
+    temp_c = ( (section.kl + section.kr)/2 )^(5/8)
+
+    return temp_a*temp_b/temp_c
 end
 
 end
