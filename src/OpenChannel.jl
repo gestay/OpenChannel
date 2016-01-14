@@ -49,6 +49,11 @@ function yc(section::Trapezoidal, Q::Real, g::Real)
     return fzero(x -> Fr2(section, Q, g, x) - 1, 0, guess)
 end
 
+#Normal discharge
+function Qn(section::Section, s::Real, n::Real, y::Real)
+    return ( area(section, y)^(5/3) ) * sqrt(s) / ( n * wp(section, y)^(2/3) )
+end
+
 #Normal depth
 function yn(section::Triangular, Q::Real, s::Real, n::Real)
     temp_a = ( Q*n/sqrt(s) )^(3/8)
@@ -57,6 +62,13 @@ function yn(section::Triangular, Q::Real, s::Real, n::Real)
     temp_c = ( (section.kl + section.kr)/2 )^(5/8)
 
     return temp_a*temp_b/temp_c
+end
+
+function yn(section::Trapezoidal, Q::Real, s::Real, n::Real)
+    tri = Triangular(section.kl, section.kr)
+    guess = yn(tri, Q, s, n)
+    #Review the bracket
+    return fzero(x -> Q - Qn(section, s, n, x), 0, guess)
 end
 
 end
